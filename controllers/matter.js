@@ -1,5 +1,8 @@
 
 const express = require('express')
+const {
+  Op
+} = require('sequelize');
 
 const db = require('../models/index');
 
@@ -23,8 +26,9 @@ async function create(
       firstName: "typecheck",
       LastName: "zz",
       nickname: "fff",
+      matterType: "リフォーム",
       matterTypeId: null,
-      matterTypeReferenceId: 1
+      matterTypeReferenceId: 2
     }
 
     console.log(matterData);
@@ -134,9 +138,41 @@ async function get(
     })
 
   }
+}
 
+
+async function searchByKeyword(  req, res){
+
+
+  const condition = {
+    [Op.and]:
+    [
+      {nickname: 'fff'},
+      {[Op.or]: [
+        {matterType: 'リフォーム'},
+        {matterTypeReferenceId: 1}
+      ]}
+    ]
+
+  }
+
+
+  const whereCondition = {
+    distinct: true,
+    where: condition,
+    subQuery: false,
+  }
+
+  let matters = await Matter.findAll(whereCondition)
+
+  res.json({
+    success: true,
+    matters,
+    error: [],
+  })
 
 }
+
 
 function convertMatterType(matter){
   console.log("convertMatterType", matter);
@@ -151,4 +187,4 @@ function convertMatterType(matter){
 
 
 
-module.exports = {create, update, get}
+module.exports = {create, update, get, searchByKeyword}

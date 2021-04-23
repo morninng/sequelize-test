@@ -1,0 +1,35 @@
+https://qiita.com/mima_ita/items/014dcb42872f3a10855b
+
+
+
+use test_db;
+show tables;
+desc [テーブル名]
+desc Users;
+desc Matters;
+SELECT * FROM Matters;
+
+
+alter table Matters ADD nickname varchar(255) not null;
+
+sequelize-cli db:migrate
+
+MatterTypeのModel作成
+追加、更新できるようにする。
+Matter typeをforeign keyにして、matterのModelに追加
+
+Matter を取得するときに、Matterからデータを取得してから渡す。
+
+sequelize model:generate --name MatterType --attributes name:string
+sequelize-cli db:migrate
+
+
+sequelize-cli migration:generate --name migration-skeleton
+
+
+
+sequelize model:generate --name MatterTypeReference --attributes name:string
+sequelize-cli db:migrate
+
+sequelize model:generate --name MatterTypeReferenceId --attributes name:string
+
